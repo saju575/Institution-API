@@ -6,6 +6,7 @@ const cors = require("cors");
 
 const { errorResponse } = require("./controllers/response/response.controller");
 const administratorRoute = require("./routers/administrator.route");
+const newsRoute = require("./routers/news.route");
 
 /* 
     making app
@@ -29,6 +30,11 @@ app.use(express.urlencoded({ extended: true }));
   administrator route
 */
 app.use("/api/v1/administrator", administratorRoute);
+
+/* 
+  news route
+*/
+app.use("/api/v1/news", newsRoute);
 
 /*
     Client error handler

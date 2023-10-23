@@ -19,7 +19,7 @@ const {
 const {
   addDummyAdministator,
 } = require("../seed/administator/createDummydata");
-const upload = require("../middlewares/multer.middleware");
+const { upload } = require("../middlewares/multer.middleware");
 
 const administratorRoute = express.Router();
 

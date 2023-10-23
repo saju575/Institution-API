@@ -97,6 +97,10 @@ exports.deleteSingleAdministrator = async (req, res, next) => {
       throw createHttpError(404, "Administrator not found");
     }
 
+    if (administrator?.image.public_id) {
+      // destroy the existing image
+      await cloudinary.uploader.destroy(administrator.image.public_id);
+    }
     await Administrator.findByIdAndRemove(administratorId);
 
     return successResponse(res, {

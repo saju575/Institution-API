@@ -33,3 +33,6 @@ exports.CLIENT_URL = process.env.CLIENT_URL;
 exports.CLOUDINARY_NAME = process.env.CLOUDINARY_NAME;
 exports.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
 exports.CLOUDINARY_SECRET_KEY = process.env.CLOUDINARY_SECRET_KEY;
+
+exports.IMAGE_SIZE = 3 * 1024 * 1024;
+exports.PDF_SIZE = 50 * 1024 * 1024;
