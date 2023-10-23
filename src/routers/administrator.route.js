@@ -20,6 +20,10 @@ const {
   addDummyAdministator,
 } = require("../seed/administator/createDummydata");
 const { upload } = require("../middlewares/multer.middleware");
+const {
+  isAuthenticated,
+  authorizeRole,
+} = require("../middlewares/auth.middleware");
 
 const administratorRoute = express.Router();
 
@@ -40,27 +44,36 @@ administratorRoute.get("/:id", getSingleAdministrator);
 /* 
   delete single administrator 
   requires admin or super admin to delete
-  TODO:add To a middleware that will check admin
+  
 */
-administratorRoute.delete("/:id", deleteSingleAdministrator);
+administratorRoute.delete(
+  "/:id",
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
+  deleteSingleAdministrator
+);
 
 /* 
   create administrator
-  TODO:add To a middleware that will check admin
+  
 */
 administratorRoute.post(
   "/",
   upload.single("image"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   reqBodyValidator(administratorCreateSchema),
   createAdministrator
 );
 
 /* 
 update administrator information
-TODO:add To a middleware that will check admin
+
 */
 administratorRoute.put(
   "/update-info/:id",
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   reqBodyValidator(administratorUpdateSchema),
   updateAdministratorInfo
 );
@@ -71,6 +84,8 @@ administratorRoute.put(
 administratorRoute.patch(
   "/update-image/:id",
   upload.single("image"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   updateAdministratorImage
 );
 /* 
