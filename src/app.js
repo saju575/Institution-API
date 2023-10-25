@@ -8,6 +8,7 @@ const { errorResponse } = require("./controllers/response/response.controller");
 const administratorRoute = require("./routers/administrator.route");
 const newsRoute = require("./routers/news.route");
 const adminRoute = require("./routers/admin.route");
+const layoutRoute = require("./routers/layout.route");
 
 /* 
     making app
@@ -46,6 +47,11 @@ app.use("/api/v1/news", newsRoute);
   admin route
 */
 app.use("/api/v1/admin", adminRoute);
+
+/* 
+  layout route
+*/
+app.use("/api/v1/layout", layoutRoute);
 
 /*
     Client error handler
