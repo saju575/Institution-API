@@ -5,8 +5,8 @@ exports.administratorQuerySchema = Joi.object({
   page: Joi.number().integer().min(1),
   limit: Joi.number().integer().min(1),
   searchQuery: Joi.string(),
-  role: Joi.string().valid("শিক্ষক", "কর্মকর্তা"),
-  position: Joi.string().valid("headmaster", "general teacher"),
+  role: Joi.string().valid("teacher", "others", "staff"),
+  position: Joi.string(),
   gender: Joi.string().valid("male", "female", "other"),
 });
 
@@ -24,11 +24,11 @@ exports.administratorCreateSchema = Joi.object({
   institution: Joi.string().required().messages(errorMessages),
   phone: Joi.string().allow(null).optional(),
   role: Joi.string()
-    .valid("শিক্ষক", "কর্মকর্তা")
+    .valid("teacher", "others", "staff")
     .required()
     .messages(errorMessages),
   position: Joi.string()
-    .valid("headmaster", "general teacher")
+
     .required()
     .messages(errorMessages),
   gender: Joi.string().valid("male", "female", "other").optional(),
@@ -39,8 +39,8 @@ exports.administratorUpdateSchema = Joi.object({
   name: Joi.string(),
   institution: Joi.string(),
   phone: Joi.string().allow(null),
-  role: Joi.string().valid("শিক্ষক", "কর্মকর্তা"),
-  position: Joi.string().valid("headmaster", "general teacher"),
+  role: Joi.string().valid("teacher", "others", "staff"),
+  position: Joi.string(),
   gender: Joi.string().valid("male", "female", "other"),
   desc: Joi.string().allow(null),
 });

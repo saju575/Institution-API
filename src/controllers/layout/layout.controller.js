@@ -59,11 +59,15 @@ exports.createLayout = async (req, res, next) => {
         established,
         institutionCode,
         website,
+        institution_name,
       } = req.body;
 
       const institution_info = {};
       if (phone) {
         institution_info.phone = phone;
+      }
+      if (institution_name) {
+        institution_info.institution_name = institution_name;
       }
       if (email) {
         institution_info.email = email;
@@ -163,6 +167,7 @@ exports.editLayoutHandler = async (req, res, next) => {
 
     if (type === "institution_info") {
       const {
+        institution_name,
         phone,
         email,
         village,
@@ -177,6 +182,9 @@ exports.editLayoutHandler = async (req, res, next) => {
       const institution_info = {};
       if (phone) {
         institution_info.phone = phone;
+      }
+      if (institution_name) {
+        institution_info.institution_name = institution_name;
       }
       if (email) {
         institution_info.email = email;

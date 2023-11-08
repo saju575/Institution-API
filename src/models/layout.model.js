@@ -24,6 +24,7 @@ const presidentMessage = new Schema({
 });
 
 const institutionInfo = new Schema({
+  institution_name: { type: String },
   email: { type: String },
   phone: { type: String },
   village: { type: String },

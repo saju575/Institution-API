@@ -10,6 +10,7 @@ const typeEnum = [
   "admission notice",
   "admission result",
   "admission waiting result",
+  "event",
   "general notice",
 ];
 

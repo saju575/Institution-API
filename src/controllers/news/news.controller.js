@@ -28,11 +28,10 @@ exports.createNews = async (req, res, next) => {
       uploadableData.eventDate = eventDate;
     }
 
-    // check if image is already uploaded
-    if (req.fileType === "image" && req.files["image"]) {
-      if (req?.files["image"][0]) {
+    if (req.files) {
+      if (req.files["image"] && req.files["image"][0]) {
         if (req.files["image"][0].size > IMAGE_SIZE) {
-          throw new Error("Image file size needed less then 3 MB");
+          throw new Error("Image file size needed less than 3 MB");
         }
         const image = req.files["image"][0].path;
 
@@ -47,13 +46,10 @@ exports.createNews = async (req, res, next) => {
 
         fs.unlinkSync(image);
       }
-    }
 
-    // check if pdf is  uploaded
-    if (req.fileType === "pdf" && req.files["pdf"]) {
-      if (req?.files["pdf"][0]) {
+      if (req.files["pdf"] && req.files["pdf"][0]) {
         if (req.files["pdf"][0].size > PDF_SIZE) {
-          throw new Error("PDF file size needed less then 50 MB");
+          throw new Error("PDF file size needed less than 50 MB");
         }
         const pdf = req.files["pdf"][0].path;
 
@@ -273,7 +269,7 @@ exports.getAllNews = async (req, res, next) => {
     }
 
     const news = await News.find(query)
-      .sort({ createdAt: -1 })
+      .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
@@ -287,6 +283,7 @@ exports.getAllNews = async (req, res, next) => {
         currentPage: pageInt,
         totalPages: Math.ceil(totalDocuments / limitInt),
         totalNews: totalDocuments,
+        hasNext: pageInt < Math.ceil(totalDocuments / limitInt) ? true : false,
       },
     });
   } catch (error) {

@@ -23,12 +23,12 @@ const administratorSchema = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ["শিক্ষক", "কর্মকর্তা"],
+      // enum: ["শিক্ষক", "কর্মকর্তা", "others"],
+      enum: ["teacher", "staff", "others"],
     },
     position: {
       type: String,
       required: true,
-      enum: ["headmaster", "general teacher"],
     },
     gender: {
       type: String,

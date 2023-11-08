@@ -15,6 +15,7 @@ exports.newsCreateValidation = Joi.object({
       "admission notice",
       "admission result",
       "admission waiting result",
+      "event",
       "general notice"
     )
     .required(),
@@ -38,6 +39,7 @@ exports.newsUpdateValidation = Joi.object({
       "admission notice",
       "admission result",
       "admission waiting result",
+      "event",
       "general notice"
     )
     .optional(),
@@ -61,6 +63,7 @@ exports.newsQuerySchema = Joi.object({
       "admission notice",
       "admission result",
       "admission waiting result",
+      "event",
       "general notice"
     )
     .optional(),

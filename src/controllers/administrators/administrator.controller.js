@@ -55,6 +55,7 @@ exports.getAllAdministrators = async (req, res, next) => {
         currentPage: pageInt,
         totalPages: Math.ceil(totalDocuments / limitInt),
         totalAdministrators: totalDocuments,
+        hasNext: pageInt < Math.ceil(totalDocuments / limitInt) ? true : false,
       },
     });
   } catch (error) {
