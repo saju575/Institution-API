@@ -22,7 +22,7 @@ const errorMessages = {
 exports.administratorCreateSchema = Joi.object({
   name: Joi.string().required().messages(errorMessages),
   institution: Joi.string().required().messages(errorMessages),
-  phone: Joi.string().allow(null).optional(),
+  phone: Joi.string().optional(),
   role: Joi.string()
     .valid("teacher", "others", "staff")
     .required()

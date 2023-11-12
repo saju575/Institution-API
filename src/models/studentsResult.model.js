@@ -1,16 +1,64 @@
 const { Schema, model } = require("mongoose");
 
 const subject = new Schema({
-  english: {
+  English: {
     type: Number,
   },
-  bangla: {
+  Bangla: {
     type: Number,
   },
-  science: {
+  "Bangla 1st Paper": {
     type: Number,
   },
-  chemistry: {
+  "Bangla 2nd Paper": {
+    type: Number,
+  },
+  "English 1st Paper": {
+    type: Number,
+  },
+  "English 2nd Paper": {
+    type: Number,
+  },
+  Math: {
+    type: Number,
+  },
+  Religion: {
+    type: Number,
+  },
+  ICT: {
+    type: Number,
+  },
+  Physics: {
+    type: Number,
+  },
+  Biology: {
+    type: Number,
+  },
+  "Higher Math": {
+    type: Number,
+  },
+  Accounting: {
+    type: Number,
+  },
+  Finance: {
+    type: Number,
+  },
+  "Business Entrepreneurship": {
+    type: Number,
+  },
+  "Agricultural Studies": {
+    type: Number,
+  },
+  "General Science": {
+    type: Number,
+  },
+  "Bangladesh and Global Studies": {
+    type: Number,
+  },
+  Science: {
+    type: Number,
+  },
+  Chemistry: {
     type: Number,
   },
 });
@@ -22,9 +70,10 @@ const result = new Schema({
   name: {
     type: String,
   },
-  gpa: {
+  GPA: {
     type: Number,
   },
+
   subjects: {
     type: [subject],
   },
@@ -39,12 +88,12 @@ const resultSchema = new Schema(
       type: String,
       required: true,
     },
-
-    session: {
+    examType: {
       type: String,
-      //   required: true,
+      required: true,
     },
-    groups: {
+
+    group: {
       type: String,
     },
     year: {

@@ -20,10 +20,10 @@ const {
   addDummyAdministator,
 } = require("../seed/administator/createDummydata");
 const { upload } = require("../middlewares/multer.middleware");
-const {
-  isAuthenticated,
-  authorizeRole,
-} = require("../middlewares/auth.middleware");
+// const {
+//   isAuthenticated,
+//   authorizeRole,
+// } = require("../middlewares/auth.middleware");
 
 const administratorRoute = express.Router();
 
@@ -48,8 +48,8 @@ administratorRoute.get("/:id", getSingleAdministrator);
 */
 administratorRoute.delete(
   "/:id",
-  isAuthenticated,
-  authorizeRole("admin", "superAdmin"),
+  // isAuthenticated,
+  // authorizeRole("admin", "superAdmin"),
   deleteSingleAdministrator
 );
 
@@ -60,8 +60,8 @@ administratorRoute.delete(
 administratorRoute.post(
   "/",
   upload.single("image"),
-  isAuthenticated,
-  authorizeRole("admin", "superAdmin"),
+  // isAuthenticated,
+  // authorizeRole("admin", "superAdmin"),
   reqBodyValidator(administratorCreateSchema),
   createAdministrator
 );
@@ -72,8 +72,8 @@ update administrator information
 */
 administratorRoute.put(
   "/update-info/:id",
-  isAuthenticated,
-  authorizeRole("admin", "superAdmin"),
+  // isAuthenticated,
+  // authorizeRole("admin", "superAdmin"),
   reqBodyValidator(administratorUpdateSchema),
   updateAdministratorInfo
 );
@@ -84,8 +84,8 @@ administratorRoute.put(
 administratorRoute.patch(
   "/update-image/:id",
   upload.single("image"),
-  isAuthenticated,
-  authorizeRole("admin", "superAdmin"),
+  // isAuthenticated,
+  // authorizeRole("admin", "superAdmin"),
   updateAdministratorImage
 );
 /* 

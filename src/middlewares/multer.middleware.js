@@ -19,17 +19,6 @@ function checkFileType(file, cb) {
   }
 }
 
-// Create a multer storage configuration for file uploads
-
-exports.upload = multer({
-  storage: multer.memoryStorage(), // Use memory storage for temporary files
-  limits: { fileSize: 3 * 1024 * 1024 }, //up to 2mb
-  fileFilter: function (req, file, cb) {
-    //check the file type
-    checkFileType(file, cb);
-  },
-});
-
 // Create a storage engine using diskStorage
 const diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -39,6 +28,43 @@ const diskStorage = multer.diskStorage({
   filename: function (req, file, cb) {
     // Define the filename of the uploaded file on disk
     cb(null, file.originalname);
+  },
+});
+
+// Set up the multer storage and file filter for xls xlsx
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  // Check if the file type is either XLSX or XLS
+  if (
+    file.mimetype ===
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+    file.mimetype === "application/vnd.ms-excel"
+  ) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error("Invalid file type. Only XLSX and XLS files are allowed."),
+      false
+    );
+  }
+};
+
+// Create a multer storage configuration for file uploads
+
+exports.upload = multer({
+  storage: multer.memoryStorage(), // Use memory storage for temporary files
+  limits: { fileSize: 3 * 1024 * 1024 }, //up to 2mb
+  fileFilter: function (req, file, cb) {
+    //check the file type
+    checkFileType(file, cb);
   },
 });
 
@@ -64,5 +90,14 @@ exports.uploadMultiple = multer({
   },
   limits: {
     fileSize: 100 * 1024 * 1024, // 100 MB
+  },
+});
+
+// Set up multer for xlx with the defined storage and file filter
+exports.uploadXlxFile = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10 MB limit
   },
 });

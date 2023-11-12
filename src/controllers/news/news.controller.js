@@ -217,6 +217,57 @@ exports.deleteNews = async (req, res, next) => {
   }
 };
 
+/* Delete files */
+exports.deleteFile = async (req, res, next) => {
+  try {
+    const { id, type } = req.params;
+
+    if (!id && !type) {
+      throw createHttpError(404, "Id or type not provided");
+    }
+
+    // Fetch the document from  database based on the provided _id
+    const document = await News.findById(id);
+
+    if (!document) {
+      throw createHttpError(404, "Document not found");
+    }
+
+    // Check if the provided type is 'image' or 'pdf'
+    if (type !== "image" && type !== "pdf") {
+      throw createHttpError(
+        404,
+        "Invalid type parameter. Use 'image' or 'pdf'."
+      );
+    }
+
+    if (!document[type]) {
+      throw createHttpError(404, "No file there");
+    }
+    // Delete from Cloudinary
+    try {
+      const publicId = document[type]?.public_id;
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId);
+      }
+    } catch (cloudinaryError) {
+      throw cloudinaryError;
+    }
+
+    if (document[type]) {
+      document[type] = null;
+    }
+
+    await document.save();
+
+    return successResponse(res, {
+      message: "Successfully deleted file",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 /* 
   get single news cotroller
 */
