@@ -2,7 +2,7 @@ require("dotenv").config();
 /* 
     server port number
 */
-exports.SERVER_PORT = process.env.SERVER_PORT;
+exports.SERVER_PORT = process.env.SERVER_PORT || 5000;
 
 /*
     mongodb url
