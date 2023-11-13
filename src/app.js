@@ -24,6 +24,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://institution-admin-panel.netlify.app",
+      "https://institution-client.netlify.app",
     ],
     credentials: true,
   })
