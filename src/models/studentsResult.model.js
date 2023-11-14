@@ -75,7 +75,7 @@ const result = new Schema({
   },
 
   subjects: {
-    type: [subject],
+    type: subject,
   },
 });
 
@@ -84,6 +84,10 @@ const result = new Schema({
 */
 const resultSchema = new Schema(
   {
+    title: {
+      type: String,
+      required: true,
+    },
     classTitle: {
       type: String,
       required: true,
@@ -92,9 +96,14 @@ const resultSchema = new Schema(
       type: String,
       required: true,
     },
-
+    section: {
+      type: String,
+      required: true,
+    },
     group: {
       type: String,
+      required: true,
+      default: "None",
     },
     year: {
       type: Number,

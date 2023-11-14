@@ -8,21 +8,21 @@ const createHttpError = require("http-errors");
 */
 exports.creatResult = async (req, res, next) => {
   try {
-    const { classTitle, session, year, group, examType } = req.body;
+    const { title, classTitle, year, group, examType, section } = req.body;
+    if (!req.file) {
+      throw createHttpError(404, "Excel file not found");
+    }
     const filePath = req.file.path;
     const workbook = new excel.Workbook();
     const jsonResult = {
+      title,
       classTitle,
       year: year,
       examType,
+      section,
+      group,
       results: [],
     };
-    if (session) {
-      jsonResult.session = session;
-    }
-    if (group) {
-      jsonResult.group = group;
-    }
 
     try {
       await workbook.xlsx.readFile(filePath);
@@ -80,6 +80,7 @@ exports.creatResult = async (req, res, next) => {
 exports.getAllResults = async (req, res, next) => {
   try {
     const {
+      title,
       classTitle,
       examType,
       group,
@@ -90,6 +91,9 @@ exports.getAllResults = async (req, res, next) => {
     } = req.query;
     let filter = {};
 
+    if (title) {
+      filter.title = title;
+    }
     if (classTitle) {
       filter.classTitle = new RegExp(classTitle, "i");
     }
@@ -121,8 +125,10 @@ exports.getAllResults = async (req, res, next) => {
     let offset = (pageInt - 1) * parseInt(limit);
 
     const results = await Result.find(filter)
+      .sort({ updatedAt: -1 })
       .skip(offset)
-      .limit(parseInt(limit));
+      .limit(parseInt(limit))
+      .exec();
 
     return successResponse(res, {
       message: "Data returned successfully",
@@ -145,25 +151,25 @@ exports.getAllResults = async (req, res, next) => {
 */
 exports.getSingleStudentResult = async (req, res, next) => {
   try {
-    const { classTitle, year, examType, group, session, roll } = req.body;
+    const { classTitle, year, examType, group, roll, section } = req.body;
 
     // build filter based on provided data
     const filter = {
       classTitle,
       year,
+      section,
       examType,
+      group,
       "results.roll": roll,
     };
 
-    if (group) {
-      filter.group = group;
-    }
-
     const studentResult = await Result.findOne(filter, {
+      title: 1,
       classTitle: 1,
       year: 1,
       examType: 1,
       group: 1,
+      section: 1,
       "results.$": 1,
     });
 
@@ -176,6 +182,141 @@ exports.getSingleStudentResult = async (req, res, next) => {
         ...studentResult._doc,
         results: studentResult._doc.results[0],
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* get single result */
+exports.getSingleResult = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      throw createHttpError(404, "Id not provided");
+    }
+
+    const result = await Result.findById(id);
+
+    if (!result) {
+      throw createHttpError(404, "Result not found");
+    }
+
+    return successResponse(res, {
+      payload: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* 
+  Delete single result
+*/
+exports.deleteSingleResult = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      throw createHttpError(404, "Id not provided");
+    }
+
+    const result = await Result.findById(id);
+
+    if (!result) {
+      throw createHttpError(404, "Result not found");
+    }
+
+    await Result.findByIdAndDelete(id);
+
+    return successResponse(res, {
+      message: "Result deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* update result */
+exports.updateResult = async (req, res, next) => {
+  try {
+    const resultId = req.params.resultId;
+    const { title, classTitle, year, group, examType, section } = req.body;
+
+    // Validate input data (add your validation logic here)
+
+    const updatedResultData = {
+      title,
+      classTitle,
+      year,
+      group,
+      examType,
+      section,
+    };
+
+    if (req.file) {
+      const filePath = req.file.path;
+
+      try {
+        const workbook = new excel.Workbook();
+        await workbook.xlsx.readFile(filePath);
+        const workSheet = workbook.getWorksheet(1);
+
+        updatedResultData.results = [];
+
+        workSheet.eachRow((row, rowNumber) => {
+          if (rowNumber === 1) {
+            return;
+          }
+
+          const rowObject = {
+            subjects: {},
+          };
+
+          row.eachCell((cell, colNumber) => {
+            const headerCell = workSheet.getRow(1).getCell(colNumber);
+            const headerText = headerCell.text.toString();
+
+            if (
+              headerText === "roll" ||
+              headerText === "name" ||
+              headerText === "GPA"
+            ) {
+              rowObject[headerText] = cell.value;
+            } else {
+              rowObject.subjects[headerText] = cell.value;
+            }
+          });
+
+          updatedResultData.results.push(rowObject);
+        });
+      } catch (error) {
+        if (filePath) {
+          fs.unlinkSync(filePath);
+        }
+        throw new Error(error);
+      }
+
+      // Delete the uploaded file after processing
+      fs.unlinkSync(filePath);
+    }
+
+    const updatedResult = await Result.findByIdAndUpdate(
+      resultId,
+      updatedResultData,
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedResult) {
+      return errorResponse(res, 404, "Result not found");
+    }
+
+    return successResponse(res, {
+      message: "Result updated successfully",
+      payload: updatedResult,
     });
   } catch (error) {
     next(error);
