@@ -3,11 +3,12 @@ const {
   createLayout,
   editLayoutHandler,
   getLayoutByType,
+  getSingleLayout,
 } = require("../controllers/layout/layout.controller");
-const {
-  isAuthenticated,
-  authorizeRole,
-} = require("../middlewares/auth.middleware");
+// const {
+//   isAuthenticated,
+//   authorizeRole,
+// } = require("../middlewares/auth.middleware");
 
 const layoutRoute = express.Router();
 
@@ -25,9 +26,9 @@ layoutRoute.post(
   layout edit
 */
 layoutRoute.put(
-  "/edit",
-  isAuthenticated,
-  authorizeRole("admin", "superAdmin"),
+  "/edit/:id",
+  // isAuthenticated,
+  // authorizeRole("admin", "superAdmin"),
   editLayoutHandler
 );
 
@@ -35,5 +36,8 @@ layoutRoute.put(
     get layout data
 */
 layoutRoute.get("/", getLayoutByType);
+
+/* get Single layout with id */
+layoutRoute.get("/:id", getSingleLayout);
 
 module.exports = layoutRoute;

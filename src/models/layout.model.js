@@ -6,21 +6,21 @@ const bannerImageSchema = new Schema({
 });
 
 const aboutInstitution = new Schema({
-  about: {
+  desc: {
     type: String,
   },
 });
 
 const institutionObectives = new Schema({
-  objectives: { type: String },
+  desc: { type: String },
 });
 
 const principalMessage = new Schema({
-  messsage: { type: String },
+  desc: { type: String },
 });
 
 const presidentMessage = new Schema({
-  message: { type: String },
+  desc: { type: String },
 });
 
 const institutionInfo = new Schema({
