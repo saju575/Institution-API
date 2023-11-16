@@ -1,10 +1,13 @@
 const createHttpError = require("http-errors");
 const Layout = require("../../models/layout.model");
 const { successResponse } = require("../response/response.controller");
+const dataUri = require("../../helper/imageToDataUri.helper");
+const cloudinary = require("cloudinary").v2;
 
 exports.createLayout = async (req, res, next) => {
   try {
     const { type } = req.body;
+
     const isTypeExist = await Layout.findOne({ type });
 
     if (isTypeExist) {
@@ -22,34 +25,26 @@ exports.createLayout = async (req, res, next) => {
       };
 
       await Layout.create({ type, about_institution });
-    }
-
-    if (type === "institution_objective") {
+    } else if (type === "institution_objective") {
       const { desc } = req.body;
       const institution_objective = {
         desc,
       };
 
       await Layout.create({ type, institution_objective });
-    }
-
-    if (type === "principal_message") {
+    } else if (type === "principal_message") {
       const { desc } = req.body;
       const principal_message = {
         desc,
       };
       await Layout.create({ type, principal_message });
-    }
-
-    if (type === "president_message") {
+    } else if (type === "president_message") {
       const { desc } = req.body;
       const president_message = {
         desc,
       };
       await Layout.create({ type, president_message });
-    }
-
-    if (type === "institution_info") {
+    } else if (type === "institution_info") {
       const {
         phone,
         email,
@@ -61,11 +56,21 @@ exports.createLayout = async (req, res, next) => {
         institutionCode,
         website,
         institution_name,
+        upazila,
+        location_name,
+        map_link,
       } = req.body;
 
+      // store available information into object
       const institution_info = {};
       if (phone) {
         institution_info.phone = phone;
+      }
+      if (location_name) {
+        institution_info.location_name = location_name;
+      }
+      if (map_link) {
+        institution_info.map_link = map_link;
       }
       if (institution_name) {
         institution_info.institution_name = institution_name;
@@ -94,29 +99,40 @@ exports.createLayout = async (req, res, next) => {
       if (website) {
         institution_info.website = website;
       }
+      if (upazila) {
+        institution_info.upazila = upazila;
+      }
 
+      if (req.file) {
+        const image = dataUri(req.file).content;
+
+        // Upload the image directly to Cloudinary
+        const imageUploadResult = await cloudinary.uploader.upload(image, {
+          folder: "layout",
+        });
+        institution_info.logo = {
+          url: imageUploadResult.secure_url,
+          public_id: imageUploadResult.public_id,
+        };
+      }
       await Layout.create({ type, institution_info });
-    }
-
-    if (type === "boys_and_girls_scout_guide") {
+    } else if (type === "boys_and_girls_scout_guide") {
       const { desc } = req.body;
 
       const boys_and_girls_scout_guide = { desc };
       await Layout.create({ type, boys_and_girls_scout_guide });
-    }
-
-    if (type === "debates_compitition") {
+    } else if (type === "debates_compitition") {
       const { desc } = req.body;
       const debates_compitition = { desc };
 
       await Layout.create({ type, debates_compitition });
-    }
-    if (type === "sports") {
+    } else if (type === "sports") {
       const { desc } = req.body;
       const sports = { desc };
       await Layout.create({ type, sports });
+    } else {
+      throw createHttpError(404, "Can not create layout with this type");
     }
-
     return successResponse(res, {
       message: "SuccessFully created",
     });
@@ -162,33 +178,50 @@ exports.editLayoutHandler = async (req, res, next) => {
       const { desc } = req.body;
 
       const sportsData = await Layout.findOne({ _id: id, type });
+
+      if (!sportsData) {
+        throw createHttpError(
+          404,
+          "Not layout found with the given id or type"
+        );
+      }
+
       const sports = { desc };
       sportsData.sports = sports;
       await sportsData.save();
-    }
-
-    if (type === "debates_compitition") {
+    } else if (type === "debates_compitition") {
       const { desc } = req.body;
 
       const debatesData = await Layout.findOne({ _id: id, type });
+
+      if (!debatesData) {
+        throw createHttpError(
+          404,
+          "Not layout found with the given id or type"
+        );
+      }
+
       const debates_compitition = { desc };
 
       debatesData.debates_compitition = debates_compitition;
       await debatesData.save();
-    }
-
-    if (type === "boys_and_girls_scout_guide") {
+    } else if (type === "boys_and_girls_scout_guide") {
       const { desc } = req.body;
 
       const scoutData = await Layout.findOne({ _id: id, type });
+
+      if (!scoutData) {
+        throw createHttpError(
+          404,
+          "Not layout found with the given id or type"
+        );
+      }
 
       const boys_and_girls_scout_guide = { desc };
 
       scoutData.boys_and_girls_scout_guide = boys_and_girls_scout_guide;
       await scoutData.save();
-    }
-
-    if (type === "institution_info") {
+    } else if (type === "institution_info") {
       const {
         institution_name,
         phone,
@@ -200,11 +233,31 @@ exports.editLayoutHandler = async (req, res, next) => {
         established,
         institutionCode,
         website,
+        upazila,
+        map_link,
+        location_name,
       } = req.body;
 
+      /* find the existing  */
+      const institutionData = await Layout.findOne({ _id: id, type });
+
+      if (!institutionData) {
+        throw createHttpError(
+          404,
+          "Not layout found with the given id or type"
+        );
+      }
+
+      //store the available data into object
       const institution_info = {};
       if (phone) {
         institution_info.phone = phone;
+      }
+      if (location_name) {
+        institution_info.location_name = location_name;
+      }
+      if (map_link) {
+        institution_info.map_link = map_link;
       }
       if (institution_name) {
         institution_info.institution_name = institution_name;
@@ -233,36 +286,68 @@ exports.editLayoutHandler = async (req, res, next) => {
       if (website) {
         institution_info.website = website;
       }
+      if (upazila) {
+        institution_info.upazila = upazila;
+      }
 
-      const institutionData = await Layout.findOne({ type });
+      //check image is given or not
+      if (req.file) {
+        if (institutionData.institution_info?.logo.public_id) {
+          // destroy the existing image
+          await cloudinary.uploader.destroy(
+            institutionData.institution_info?.logo.public_id
+          );
+        }
 
+        const image = dataUri(req.file).content;
+
+        // Upload the image directly to Cloudinary
+        const imageUploadResult = await cloudinary.uploader.upload(image, {
+          folder: "layout",
+        });
+
+        institutionData.institution_info.logo.public_id =
+          imageUploadResult.public_id;
+        institutionData.institution_info.logo.url =
+          imageUploadResult.secure_url;
+      }
       institutionData.institution_info = institution_info;
 
       await institutionData.save();
-    }
-
-    if (type === "president_message") {
+    } else if (type === "president_message") {
       const { desc } = req.body;
       const president_message = {
         desc,
       };
       const messageData = await Layout.findOne({ _id: id, type });
+
+      if (!messageData) {
+        throw createHttpError(
+          404,
+          "Not layout found with the given id or type"
+        );
+      }
+
       messageData.president_message = president_message;
       await messageData.save();
-    }
-
-    if (type === "principal_message") {
+    } else if (type === "principal_message") {
       const { desc } = req.body;
       const principal_message = {
         desc,
       };
       const messageData = await Layout.findOne({ _id: id, type });
+
+      if (!messageData) {
+        throw createHttpError(
+          404,
+          "Not layout found with the given id or type"
+        );
+      }
+
       messageData.principal_message = principal_message;
 
       await messageData.save();
-    }
-
-    if (type === "about_institution") {
+    } else if (type === "about_institution") {
       const { desc } = req.body;
 
       const about_institution = {
@@ -270,22 +355,36 @@ exports.editLayoutHandler = async (req, res, next) => {
       };
 
       const aboutData = await Layout.findOne({ _id: id, type });
+
+      if (!aboutData) {
+        throw createHttpError(
+          404,
+          "Not layout found with the given id or type"
+        );
+      }
+
       aboutData.about_institution = about_institution;
       await aboutData.save();
-    }
-
-    if (type === "institution_objective") {
+    } else if (type === "institution_objective") {
       const { desc } = req.body;
       const institution_objective = {
         desc,
       };
       const objectivesData = await Layout.findOne({ _id: id, type });
 
+      if (!objectivesData) {
+        throw createHttpError(
+          404,
+          "Not layout found with the given id or type"
+        );
+      }
+
       objectivesData.institution_objective = institution_objective;
 
       await objectivesData.save();
+    } else {
+      throw createHttpError(404, "Not layout found with the given id or type");
     }
-
     return successResponse(res, {
       message: "Layout Data updated successfully",
     });

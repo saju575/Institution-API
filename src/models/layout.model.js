@@ -34,6 +34,10 @@ const institutionInfo = new Schema({
   established: { type: String },
   institutionCode: { type: String },
   website: { type: String },
+  upazila: { type: String },
+  location_name: { type: String },
+  map_link: { type: String },
+  logo: { type: bannerImageSchema },
 });
 
 const boysAndGirlsScoutGide = new Schema({
