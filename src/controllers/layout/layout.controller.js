@@ -292,7 +292,7 @@ exports.editLayoutHandler = async (req, res, next) => {
 
       //check image is given or not
       if (req.file) {
-        if (institutionData.institution_info?.logo.public_id) {
+        if (institutionData.institution_info?.logo?.public_id) {
           // destroy the existing image
           await cloudinary.uploader.destroy(
             institutionData.institution_info?.logo.public_id
