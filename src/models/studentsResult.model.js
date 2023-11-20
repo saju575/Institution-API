@@ -1,136 +1,136 @@
 const { Schema, model } = require("mongoose");
 
 const subject = new Schema({
-  "Quran Majid": {
+  "QURAN MAJID": {
     type: Number,
   },
-  "Hadith Sharif": {
+  "HADITH SHARIF": {
     type: Number,
   },
-  "Hadith & Usulul Hadith": {
+  "HADITH AND USULUL HADITH": {
     type: Number,
   },
-  "Aqaid Fique": {
+  "AQID FIQH": {
     type: Number,
   },
-  "Fique 1st Paper": {
+  "FIQH 1ST PAPER": {
     type: Number,
   },
-  "Fique 2nd Paper": {
+  "FIQH 2ND PAPER": {
     type: Number,
   },
-  Arabic: {
+  ARABIC: {
     type: Number,
   },
-  "Arabic 1st Paper": {
+  "ARABIC 1ST PAPER": {
     type: Number,
   },
-  "Arabic 2nd Paper": {
+  "ARABIC 2ND PAPER": {
     type: Number,
   },
-  "Islamic History": {
+  "ISLAMIC HISTORY": {
     type: Number,
   },
-  "Balagat & Mantiq": {
+  "BALAGAT AND MANTIQ": {
     type: Number,
   },
-  Bangla: {
+  BANGLA: {
     type: Number,
   },
-  "Bangla 1st Paper": {
+  "BANGLA 1ST PAPER": {
     type: Number,
   },
-  "Bangla 2nd Paper": {
+  "BANGLA 2ND PAPER": {
     type: Number,
   },
-  English: {
+  ENGLISH: {
     type: Number,
   },
-  "English 1st Paper": {
+  "ENGLISH 1ST PAPER": {
     type: Number,
   },
-  "English 2nd Paper": {
+  "ENGLISH 2ND PAPER": {
     type: Number,
   },
-  "English Grammar and Composition": {
+  "ENGLISH GRAMMAR AND COMPOSITION": {
     type: Number,
   },
-  Science: {
+  SCIENCE: {
     type: Number,
   },
   ICT: {
     type: Number,
   },
-  Math: {
+  MATH: {
     type: Number,
   },
-  "General Math": {
+  "GENERAL MATH": {
     type: Number,
   },
-  "Higher Math": {
+  "HIGHER MATH": {
     type: Number,
   },
-  Chemistry: {
+  CHEMISTRY: {
     type: Number,
   },
-  "Chemistry 1st Paper": {
+  "CHEMISTRY 1ST PAPER": {
     type: Number,
   },
-  "Chemistry 2nd Paper": {
+  "CHEMISTRY 2ND PAPER": {
     type: Number,
   },
-  Biology: {
+  BIOLOGY: {
     type: Number,
   },
-  "Biology 1st Paper": {
+  "BIOLOGY 1ST PAPER": {
     type: Number,
   },
-  "Biology 2nd Paper": {
+  "BIOLOGY 2ND PAPER": {
     type: Number,
   },
-  Physics: {
+  PHYSICS: {
     type: Number,
   },
-  "Physics 1st Paper": {
+  "PHYSICS 1ST PAPER": {
     type: Number,
   },
-  "Physics 2nd Paper": {
+  "PHYSICS 2ND PAPER": {
     type: Number,
   },
-  Economics: {
+  ECONOMICS: {
     type: Number,
   },
-  "Economics 1st Paper": {
+  "ECONOMICS 1ST PAPER": {
     type: Number,
   },
-  "Economics 2nd Paper": {
+  "ECONOMICS 2ND PAPER": {
     type: Number,
   },
-  "History of Bangladesh and World Civilization": {
+  "HISTORY OF BANGLADESH AND WORLD CIVILIZATION": {
     type: Number,
   },
-  "Geography and Environment": {
+  "GEOGRAPHY AND ENVIRONMENT": {
     type: Number,
   },
-  "Agriculture Studies": {
+  "AGRICULTURE STUDIES": {
     type: Number,
   },
-  "Finance And Banking": {
+  "FINANCE AND BANKING": {
     type: Number,
   },
-  "Islam and Moral Education": {
+  "ISLAM AND MORAL EDUCATION": {
     type: Number,
   },
-  "Hindu Religion and Moral Education": {
+  "HINDU RELIGION AND MORAL EDUCATION": {
     type: Number,
   },
-  "Buddhist Religion and Moral Education": {
+  "BUDDHIST RELIGION AND MORAL EDUCATION": {
     type: Number,
   },
-  "Bangladesh and Global Studies": {
+  "BANGLADESH AND GLOBAL STUDIES": {
     type: Number,
   },
-  "Physical Education, Health Science and Sports": {
+  "PHYSICAL EDUCATION, HEALTH SCIENCE AND SPORTS": {
     type: Number,
   },
 });

@@ -39,11 +39,15 @@ exports.creatResult = async (req, res, next) => {
 
         row.eachCell((cell, colNumber) => {
           const headerCell = workSheet.getRow(1).getCell(colNumber);
-          const headerText = headerCell.text.toString();
+          const headerText = headerCell.text
+            .toString()
+            .replace(/\s+/g, " ")
+            .trim()
+            .toUpperCase();
 
           if (
-            headerText === "roll" ||
-            headerText === "name" ||
+            headerText.toLowerCase() === "roll" ||
+            headerText.toLowerCase() === "name" ||
             headerText === "GPA"
           ) {
             rowObject[headerText] = cell.value;
