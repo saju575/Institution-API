@@ -155,7 +155,7 @@ exports.getAllResults = async (req, res, next) => {
 */
 exports.getSingleStudentResult = async (req, res, next) => {
   try {
-    const { classTitle, year, examType, group, roll, section } = req.body;
+    const { classTitle, year, examType, group, ROLL, section } = req.body;
 
     // build filter based on provided data
     const filter = {
@@ -164,7 +164,7 @@ exports.getSingleStudentResult = async (req, res, next) => {
       section,
       examType,
       group,
-      "results.roll": roll,
+      "results.ROLL": ROLL,
     };
 
     const studentResult = await Result.findOne(filter, {
