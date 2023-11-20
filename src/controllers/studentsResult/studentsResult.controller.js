@@ -46,8 +46,8 @@ exports.creatResult = async (req, res, next) => {
             .toUpperCase();
 
           if (
-            headerText.toLowerCase() === "roll" ||
-            headerText.toLowerCase() === "name" ||
+            headerText === "ROLL" ||
+            headerText === "NAME" ||
             headerText === "GPA"
           ) {
             rowObject[headerText] = cell.value;
