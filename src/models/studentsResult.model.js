@@ -136,10 +136,10 @@ const subject = new Schema({
 });
 
 const result = new Schema({
-  ROLL: {
+  roll: {
     type: String,
   },
-  NAME: {
+  name: {
     type: String,
   },
   GPA: {
