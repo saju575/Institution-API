@@ -18,7 +18,7 @@ const layoutRoute = express.Router();
 */
 layoutRoute.post(
   "/create",
-  upload.single("image"),
+  upload.single("logo"),
   // isAuthenticated,
   // authorizeRole("admin", "superAdmin"),
   createLayout
@@ -29,7 +29,7 @@ layoutRoute.post(
 */
 layoutRoute.put(
   "/edit/:id",
-  upload.single("image"),
+  upload.single("logo"),
   // isAuthenticated,
   // authorizeRole("admin", "superAdmin"),
   editLayoutHandler
