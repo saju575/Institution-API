@@ -292,13 +292,6 @@ exports.editLayoutHandler = async (req, res, next) => {
 
       //check image is given or not
       if (req.file) {
-        if (institutionData.institution_info?.logo?.public_id) {
-          // destroy the existing image
-          await cloudinary.uploader.destroy(
-            institutionData.institution_info?.logo.public_id
-          );
-        }
-
         const image = dataUri(req.file).content;
 
         // Upload the image directly to Cloudinary
@@ -306,14 +299,31 @@ exports.editLayoutHandler = async (req, res, next) => {
           folder: "layout",
         });
 
-        institutionData.institution_info.logo.public_id =
-          imageUploadResult.public_id;
-        institutionData.institution_info.logo.url =
-          imageUploadResult.secure_url;
-      }
-      institutionData.institution_info = institution_info;
+        if (institutionData.institution_info?.logo?.public_id) {
+          // destroy the existing image
+          await cloudinary.uploader.destroy(
+            institutionData.institution_info?.logo.public_id
+          );
+        }
 
-      await institutionData.save();
+        institution_info.logo = {
+          public_id: imageUploadResult.public_id,
+          url: imageUploadResult.secure_url,
+        };
+      }
+
+      const newdata = {
+        ...institutionData.institution_info._doc,
+        ...institution_info,
+      };
+
+      await Layout.findByIdAndUpdate(
+        id,
+        { $set: { institution_info: newdata } },
+        {
+          new: true,
+        }
+      );
     } else if (type === "president_message") {
       const { desc } = req.body;
       const president_message = {
