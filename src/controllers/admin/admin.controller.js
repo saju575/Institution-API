@@ -44,6 +44,7 @@ exports.handleLogin = async (req, res, next) => {
       maxAge: 60 * 60 * 24 * 120 * 1000,
       httpOnly: true,
       sameSite: "none",
+      secure: true,
       path: "/",
     });
 
