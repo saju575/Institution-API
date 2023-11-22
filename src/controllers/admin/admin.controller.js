@@ -43,7 +43,7 @@ exports.handleLogin = async (req, res, next) => {
     res.cookie("accessToken", accessToken, {
       maxAge: 60 * 60 * 24 * 120 * 1000,
       httpOnly: true,
-      // sameSite: "none",
+      sameSite: "none",
       path: "/",
     });
 
