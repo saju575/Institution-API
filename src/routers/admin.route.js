@@ -4,6 +4,7 @@ const {
   handleCreateNewAdmin,
   activateAdminAccount,
   handleLogout,
+  handleAdminProfile,
 } = require("../controllers/admin/admin.controller");
 const {
   reqBodyValidator,
@@ -48,5 +49,8 @@ adminRoute.get("/:id/verify/:token", activateAdminAccount);
   logout Admin account
 */
 adminRoute.post("/logout", isAuthenticated, handleLogout);
+
+/* get user */
+adminRoute.get("/admin-profile", isAuthenticated, handleAdminProfile);
 
 module.exports = adminRoute;

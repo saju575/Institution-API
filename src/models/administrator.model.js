@@ -25,7 +25,7 @@ const administratorSchema = new mongoose.Schema(
       type: String,
       required: true,
       // enum: ["শিক্ষক", "কর্মকর্তা", "others"],
-      enum: ["teacher", "staff", "others"],
+      enum: ["teacher", "staff", "others", "president", "principal"],
     },
     position: {
       type: String,

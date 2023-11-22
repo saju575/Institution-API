@@ -8,10 +8,10 @@ const {
   updateResult,
 } = require("../controllers/studentsResult/studentsResult.controller");
 const { uploadXlxFile } = require("../middlewares/multer.middleware");
-// const {
-//   isAuthenticated,
-//   authorizeRole,
-// } = require("../middlewares/auth.middleware");
+const {
+  isAuthenticated,
+  authorizeRole,
+} = require("../middlewares/auth.middleware");
 
 const resultRoute = express.Router();
 
@@ -19,18 +19,29 @@ const resultRoute = express.Router();
 resultRoute.post(
   "/result",
   uploadXlxFile.single("xlxFile"),
-  // isAuthenticated,
-  // authorizeRole("admin", "superAdmin"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   creatResult
 );
 
 /* 
 delete result
 */
-resultRoute.delete("/:id", deleteSingleResult);
+resultRoute.delete(
+  "/:id",
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
+  deleteSingleResult
+);
 
 /* Update result */
-resultRoute.put("/:resultId", uploadXlxFile.single("xlxFile"), updateResult);
+resultRoute.put(
+  "/:resultId",
+  uploadXlxFile.single("xlxFile"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
+  updateResult
+);
 
 /* 
     get all results

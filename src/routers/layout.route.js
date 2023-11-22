@@ -6,10 +6,10 @@ const {
   getSingleLayout,
 } = require("../controllers/layout/layout.controller");
 const { upload } = require("../middlewares/multer.middleware");
-// const {
-//   isAuthenticated,
-//   authorizeRole,
-// } = require("../middlewares/auth.middleware");
+const {
+  isAuthenticated,
+  authorizeRole,
+} = require("../middlewares/auth.middleware");
 
 const layoutRoute = express.Router();
 
@@ -19,8 +19,8 @@ const layoutRoute = express.Router();
 layoutRoute.post(
   "/create",
   upload.single("logo"),
-  // isAuthenticated,
-  // authorizeRole("admin", "superAdmin"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   createLayout
 );
 
@@ -30,8 +30,8 @@ layoutRoute.post(
 layoutRoute.put(
   "/edit/:id",
   upload.single("logo"),
-  // isAuthenticated,
-  // authorizeRole("admin", "superAdmin"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   editLayoutHandler
 );
 

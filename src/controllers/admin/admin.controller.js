@@ -181,3 +181,21 @@ exports.handleLogout = async (req, res, next) => {
     next(error);
   }
 };
+
+/* admin profile */
+
+exports.handleAdminProfile = async (req, res, next) => {
+  try {
+    const adminProfile = req.admin;
+
+    if (!adminProfile) {
+      throw createHttpError(404, "No profile available");
+    }
+
+    return successResponse(res, {
+      payload: adminProfile,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

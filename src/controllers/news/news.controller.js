@@ -181,7 +181,6 @@ exports.updateFile = async (req, res, next) => {
       payload: updatedNews,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

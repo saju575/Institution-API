@@ -5,7 +5,13 @@ exports.administratorQuerySchema = Joi.object({
   page: Joi.number().integer().min(1),
   limit: Joi.number().integer().min(1),
   searchQuery: Joi.string(),
-  role: Joi.string().valid("teacher", "others", "staff"),
+  role: Joi.string().valid(
+    "teacher",
+    "others",
+    "staff",
+    "president",
+    "principal"
+  ),
   position: Joi.string(),
   gender: Joi.string().valid("male", "female", "other"),
 });
@@ -24,7 +30,7 @@ exports.administratorCreateSchema = Joi.object({
   institution: Joi.string().required().messages(errorMessages),
   phone: Joi.string().optional(),
   role: Joi.string()
-    .valid("teacher", "others", "staff")
+    .valid("teacher", "others", "staff", "president", "principal")
     .required()
     .messages(errorMessages),
   position: Joi.string()
@@ -39,7 +45,13 @@ exports.administratorUpdateSchema = Joi.object({
   name: Joi.string(),
   institution: Joi.string(),
   phone: Joi.string().allow(null),
-  role: Joi.string().valid("teacher", "others", "staff"),
+  role: Joi.string().valid(
+    "teacher",
+    "others",
+    "staff",
+    "president",
+    "principal"
+  ),
   position: Joi.string(),
   gender: Joi.string().valid("male", "female", "other"),
   desc: Joi.string().allow(null),

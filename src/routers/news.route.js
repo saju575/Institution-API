@@ -18,10 +18,10 @@ const {
   newsUpdateValidation,
   newsQuerySchema,
 } = require("../validators/schema/newsValidate.schema");
-// const {
-//   isAuthenticated,
-//   authorizeRole,
-// } = require("../middlewares/auth.middleware");
+const {
+  isAuthenticated,
+  authorizeRole,
+} = require("../middlewares/auth.middleware");
 
 const newsRoute = express.Router();
 
@@ -34,8 +34,8 @@ newsRoute.post(
     { name: "image", maxCount: 1 },
     { name: "pdf", maxCount: 1 },
   ]),
-  // isAuthenticated,
-  // authorizeRole("admin", "superAdmin"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   reqBodyValidator(newsCreateValidation),
   createNews
 );
@@ -45,8 +45,8 @@ newsRoute.post(
 */
 newsRoute.put(
   "/update-info/:id",
-  // isAuthenticated,
-  // authorizeRole("admin", "superAdmin"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   reqBodyValidator(newsUpdateValidation),
   newsUpdateInfo
 );
@@ -60,8 +60,8 @@ newsRoute.put(
     { name: "image", maxCount: 1 },
     { name: "pdf", maxCount: 1 },
   ]),
-  // isAuthenticated,
-  // authorizeRole("admin", "superAdmin"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   updateFile
 );
 
@@ -70,13 +70,18 @@ newsRoute.put(
 */
 newsRoute.delete(
   "/delete/:id",
-  // isAuthenticated,
-  // authorizeRole("admin", "superAdmin"),
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
   deleteNews
 );
 
 /* Delete only image or pdf */
-newsRoute.delete("/deleteFile/:id/:type", deleteFile);
+newsRoute.delete(
+  "/deleteFile/:id/:type",
+  isAuthenticated,
+  authorizeRole("admin", "superAdmin"),
+  deleteFile
+);
 
 /* 
   get single news
