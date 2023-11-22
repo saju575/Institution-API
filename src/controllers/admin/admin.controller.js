@@ -172,7 +172,12 @@ exports.activateAdminAccount = async (req, res, next) => {
 exports.handleLogout = async (req, res, next) => {
   try {
     //clear cookies
-    res.clearCookie("accessToken", { path: "/" });
+    res.clearCookie("accessToken", {
+      path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
     // successful response
     return successResponse(res, {
       statusCode: 200,
