@@ -16,9 +16,7 @@ const {
   administratorCreateSchema,
   administratorUpdateSchema,
 } = require("../validators/schema/administratorValidate.schema");
-const {
-  addDummyAdministator,
-} = require("../seed/administator/createDummydata");
+
 const { upload } = require("../middlewares/multer.middleware");
 const {
   isAuthenticated,
