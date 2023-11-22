@@ -28,6 +28,9 @@ exports.creatResult = async (req, res, next) => {
       await workbook.xlsx.readFile(filePath);
       const workSheet = workbook.getWorksheet(1);
 
+      // Recalculate formulas in the worksheet
+      workSheet.calculateFormula();
+
       workSheet.eachRow((row, rowNumber) => {
         if (rowNumber === 1) {
           return;
