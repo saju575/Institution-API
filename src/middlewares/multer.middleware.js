@@ -95,7 +95,7 @@ exports.uploadMultiple = multer({
 
 // Set up multer for xlx with the defined storage and file filter
 exports.uploadXlxFile = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   fileFilter: fileFilter,
   limits: {
     fileSize: 10 * 1024 * 1024, // 10 MB limit

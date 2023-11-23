@@ -12,8 +12,9 @@ exports.creatResult = async (req, res, next) => {
     if (!req.file) {
       throw createHttpError(404, "Excel file not found");
     }
-    const filePath = req.file.path;
+    const filebuffer = req.file.buffer;
     const workbook = new excel.Workbook();
+    workbook.calcProperties.fullCalcOnLoad = true;
     const jsonResult = {
       title,
       classTitle,
@@ -25,11 +26,10 @@ exports.creatResult = async (req, res, next) => {
     };
 
     try {
-      await workbook.xlsx.readFile(filePath);
+      await workbook.xlsx.load(filebuffer);
       const workSheet = workbook.getWorksheet(1);
 
       // Recalculate formulas in the worksheet
-      workSheet.calculateFormula();
 
       workSheet.eachRow((row, rowNumber) => {
         if (rowNumber === 1) {
@@ -48,29 +48,31 @@ exports.creatResult = async (req, res, next) => {
             .trim()
             .toUpperCase();
 
+          // let fetchValue;
+          // if (cell.formula) {
+          //   fetchValue = cell.result;
+          // } else {
+          //   fetchValue = cell.value;
+          // }
+
           if (headerText === "ROLL") {
-            rowObject["roll"] = cell.value;
+            rowObject["roll"] = cell.text;
           } else if (headerText === "NAME") {
-            rowObject["name"] = cell.value;
+            rowObject["name"] = cell.text;
           } else if (headerText === "GPA") {
-            rowObject[headerText] = cell.value;
+            rowObject[headerText] = Number(cell.text);
           } else {
-            rowObject.subjects[headerText] = cell.value;
+            rowObject.subjects[headerText] = Number(cell.text);
           }
         });
 
         jsonResult.results.push(rowObject);
       });
     } catch (error) {
-      if (filePath) {
-        fs.unlinkSync(filePath);
-      }
       throw new Error(error);
     }
 
     const resResult = await Result.create(jsonResult);
-
-    fs.unlinkSync(filePath);
 
     return successResponse(res, {
       payload: resResult,
@@ -263,11 +265,11 @@ exports.updateResult = async (req, res, next) => {
     };
 
     if (req.file) {
-      const filePath = req.file.path;
+      const filebuffer = req.file.buffer;
 
       try {
         const workbook = new excel.Workbook();
-        await workbook.xlsx.readFile(filePath);
+        await workbook.xlsx.load(filebuffer);
         const workSheet = workbook.getWorksheet(1);
 
         updatedResultData.results = [];
@@ -283,30 +285,28 @@ exports.updateResult = async (req, res, next) => {
 
           row.eachCell((cell, colNumber) => {
             const headerCell = workSheet.getRow(1).getCell(colNumber);
-            const headerText = headerCell.text.toString();
+            const headerText = headerCell.text
+              .toString()
+              .replace(/\s+/g, " ")
+              .trim()
+              .toUpperCase();
 
-            if (
-              headerText === "roll" ||
-              headerText === "name" ||
-              headerText === "GPA"
-            ) {
-              rowObject[headerText] = cell.value;
+            if (headerText === "ROLL") {
+              rowObject["roll"] = cell.text;
+            } else if (headerText === "NAME") {
+              rowObject["name"] = cell.text;
+            } else if (headerText === "GPA") {
+              rowObject[headerText] = Number(cell.text);
             } else {
-              rowObject.subjects[headerText] = cell.value;
+              rowObject.subjects[headerText] = Number(cell.text);
             }
           });
 
           updatedResultData.results.push(rowObject);
         });
       } catch (error) {
-        if (filePath) {
-          fs.unlinkSync(filePath);
-        }
         throw new Error(error);
       }
-
-      // Delete the uploaded file after processing
-      fs.unlinkSync(filePath);
     }
 
     const updatedResult = await Result.findByIdAndUpdate(
