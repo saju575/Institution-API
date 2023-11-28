@@ -22,7 +22,7 @@ exports.isAuthenticated = async (req, res, next) => {
 
     const admin = await Admin.findById(decode.id);
 
-    if (!admin) {
+    if (!admin || admin.tokenVersion !== decode.tokenVersion) {
       throw createHttpError(404, "Admin not found");
     }
 

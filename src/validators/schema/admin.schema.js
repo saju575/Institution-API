@@ -15,6 +15,6 @@ exports.adminLoginValidationSchema = Joi.object({
 exports.adminCreationSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
-
+  role: Joi.string().required().valid("admin"),
   password: Joi.string().required().min(6),
 });

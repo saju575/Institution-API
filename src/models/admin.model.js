@@ -5,6 +5,9 @@ const Schema = mongoose.Schema;
 
 const adminSchema = new Schema(
   {
+    name: {
+      type: String,
+    },
     email: {
       type: String,
       required: true,
@@ -22,6 +25,10 @@ const adminSchema = new Schema(
       type: String,
       enum: ["admin", "superAdmin"],
       default: "admin",
+    },
+    tokenVersion: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

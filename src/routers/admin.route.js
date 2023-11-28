@@ -5,6 +5,12 @@ const {
   activateAdminAccount,
   handleLogout,
   handleAdminProfile,
+  handleChangePassword,
+  handleGetAllAdminList,
+  handleDeleteAdmin,
+  handleForgotPassword,
+  handleVerifyTokenForgotPassword,
+  handleResetForgotenPassword,
 } = require("../controllers/admin/admin.controller");
 const {
   reqBodyValidator,
@@ -53,4 +59,37 @@ adminRoute.post("/logout", isAuthenticated, handleLogout);
 /* get user */
 adminRoute.get("/admin-profile", isAuthenticated, handleAdminProfile);
 
+/* change password */
+adminRoute.put("/change-password", isAuthenticated, handleChangePassword);
+
+/* get all admin */
+adminRoute.get(
+  "/all",
+  isAuthenticated,
+  authorizeRole("superAdmin"),
+  handleGetAllAdminList
+);
+
+/* delete admin */
+adminRoute.delete(
+  "/delete-admin/:id",
+  isAuthenticated,
+  authorizeRole("superAdmin"),
+  handleDeleteAdmin
+);
+
+/* forgot password */
+adminRoute.post("/forgot-password", handleForgotPassword);
+
+/* forgot password verify token */
+adminRoute.get(
+  "/reset-password/:id/verify/:token",
+  handleVerifyTokenForgotPassword
+);
+
+/* reset forgoten  password  */
+adminRoute.post(
+  "/reset-password/:id/verify/:token",
+  handleResetForgotenPassword
+);
 module.exports = adminRoute;
