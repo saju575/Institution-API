@@ -43,7 +43,7 @@ exports.handleLogin = async (req, res, next) => {
     res.cookie("accessToken", accessToken, {
       maxAge: 60 * 60 * 24 * 120 * 1000,
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "None",
       secure: true,
       path: "/",
     });
@@ -190,7 +190,7 @@ exports.handleLogout = async (req, res, next) => {
       path: "/",
       httpOnly: true,
       secure: true,
-      sameSite: "lax",
+      sameSite: "None",
     });
     // successful response
     return successResponse(res, {
@@ -262,7 +262,7 @@ exports.handleChangePassword = async (req, res, next) => {
     res.cookie("accessToken", accessToken, {
       maxAge: 60 * 60 * 24 * 120 * 1000,
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "None",
       secure: true,
       path: "/",
     });
